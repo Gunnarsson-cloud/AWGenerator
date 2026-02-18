@@ -1,25 +1,62 @@
-// === AW GENERATOR - Helsingborgs Stad ===
+// === AW GENERATOR — Stadsbyggnadsforvaltningen Helsingborg ===
 
-// State
+const PASSWORD = 'SBFAW2026';
+const STORAGE_KEY_AUTH = 'aw_auth';
+const STORAGE_KEY_DATES = 'aw_dates';
+
+// ── Auth ──
+const loginGate = document.getElementById('login-gate');
+const appContainer = document.getElementById('app');
+const loginForm = document.getElementById('login-form');
+const loginInput = document.getElementById('login-input');
+const loginError = document.getElementById('login-error');
+
+function checkAuth() {
+  if (sessionStorage.getItem(STORAGE_KEY_AUTH) === 'true') {
+    showApp();
+  }
+}
+
+function showApp() {
+  loginGate.classList.add('hidden');
+  appContainer.classList.remove('hidden');
+  renderCalendar();
+  updateCountdown();
+}
+
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault();
+  if (loginInput.value === PASSWORD) {
+    sessionStorage.setItem(STORAGE_KEY_AUTH, 'true');
+    showApp();
+  } else {
+    loginError.classList.remove('hidden');
+    loginInput.value = '';
+    loginInput.focus();
+    loginInput.classList.add('shake');
+    setTimeout(() => loginInput.classList.remove('shake'), 500);
+  }
+});
+
+checkAuth();
+
+// ── State ──
 let currentMode = 'random';
 let isSpinning = false;
 let battleVotes = { 1: 0, 2: 0 };
 let battleRestaurants = { 1: null, 2: null };
 let winnerDeclared = false;
 
-// DOM Elements
+// ── DOM refs ──
 const btnRandom = document.getElementById('btn-random');
 const btnBattle = document.getElementById('btn-battle');
-const randomMode = document.getElementById('random-mode');
-const battleMode = document.getElementById('battle-mode');
+const btnCalendar = document.getElementById('btn-calendar');
 const slotDisplay = document.getElementById('slot-display');
 const spinBtn = document.getElementById('spin-btn');
 const resultCard = document.getElementById('result-card');
 const resultName = document.getElementById('result-name');
 const resultAddress = document.getElementById('result-address');
 const resultTagline = document.getElementById('result-tagline');
-const mapsBtn = document.getElementById('maps-btn');
-const againBtn = document.getElementById('again-btn');
 const filterToggle = document.getElementById('filter-toggle');
 const filterOptions = document.getElementById('filter-options');
 const battleGenerateBtn = document.getElementById('battle-generate-btn');
@@ -27,192 +64,122 @@ const battleArena = document.getElementById('battle-arena');
 const battleControls = document.getElementById('battle-controls');
 const battleWinner = document.getElementById('battle-winner');
 
-// === UTILITY FUNCTIONS ===
+// ── Utility ──
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+function getTagline() { return rand(FUN_TAGLINES); }
 
-function getRandomItem(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-function getRandomTagline() {
-  return getRandomItem(FUN_TAGLINES);
-}
-
-function getFilteredRestaurants() {
-  const checked = [...document.querySelectorAll('.filter-chip input:checked')]
-    .map(cb => cb.value);
-  if (checked.length === 0) return RESTAURANTS;
-  return RESTAURANTS.filter(r => checked.includes(r.area));
+function getFiltered() {
+  const checked = [...document.querySelectorAll('.chip input:checked')].map(c => c.value);
+  return checked.length ? RESTAURANTS.filter(r => checked.includes(r.area)) : RESTAURANTS;
 }
 
 function getTwoRandom() {
-  const pool = getFilteredRestaurants();
+  const pool = getFiltered();
   if (pool.length < 2) return [pool[0], pool[0]];
-  const shuffled = [...pool].sort(() => Math.random() - 0.5);
-  return [shuffled[0], shuffled[1]];
+  const s = [...pool].sort(() => Math.random() - 0.5);
+  return [s[0], s[1]];
 }
 
-function openMaps(restaurant) {
-  const query = encodeURIComponent(`${restaurant.name}, ${restaurant.address}, Helsingborg`);
-  window.open(`https://www.google.com/maps/search/?api=1&query=${query}`, '_blank');
+function openMaps(r) {
+  const q = encodeURIComponent(`${r.name}, ${r.address}, Helsingborg`);
+  window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, '_blank');
+}
+
+function showToast(msg) {
+  const old = document.querySelector('.toast');
+  if (old) old.remove();
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.textContent = msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(() => requestAnimationFrame(() => t.classList.add('show')));
+  setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2500);
 }
 
 function createConfetti(container) {
-  const colors = ['#ff6b35', '#ffc857', '#ff4757', '#3b82f6', '#10b981', '#a855f7'];
-  for (let i = 0; i < 40; i++) {
-    const piece = document.createElement('div');
-    piece.className = 'confetti-piece';
-    piece.style.left = Math.random() * 100 + '%';
-    piece.style.background = getRandomItem(colors);
-    piece.style.animationDelay = Math.random() * 0.5 + 's';
-    piece.style.animationDuration = (2 + Math.random() * 2) + 's';
-    const size = 6 + Math.random() * 10;
-    piece.style.width = size + 'px';
-    piece.style.height = size + 'px';
-    piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-    container.appendChild(piece);
-    setTimeout(() => piece.remove(), 4000);
+  const colors = ['#e11d48', '#f97316', '#6366f1', '#22c55e', '#f59e0b', '#a855f7'];
+  for (let i = 0; i < 30; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.background = rand(colors);
+    p.style.animationDelay = Math.random() * 0.5 + 's';
+    p.style.animationDuration = (2 + Math.random() * 2) + 's';
+    const size = 5 + Math.random() * 8;
+    p.style.width = size + 'px';
+    p.style.height = size + 'px';
+    p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+    container.appendChild(p);
+    setTimeout(() => p.remove(), 4000);
   }
 }
 
-function showToast(message) {
-  const existing = document.querySelector('.toast');
-  if (existing) existing.remove();
-
-  const toast = document.createElement('div');
-  toast.className = 'toast';
-  toast.textContent = message;
-  document.body.appendChild(toast);
-
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      toast.classList.add('show');
-    });
-  });
-
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => toast.remove(), 400);
-  }, 2500);
-}
-
-// === MODE SWITCHING ===
-
+// ── Mode switching ──
 function switchMode(mode) {
   currentMode = mode;
-  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.mode-section').forEach(s => s.classList.remove('active'));
-
-  if (mode === 'random') {
-    btnRandom.classList.add('active');
-    randomMode.classList.add('active');
-  } else {
-    btnBattle.classList.add('active');
-    battleMode.classList.add('active');
-  }
+  document.getElementById(`btn-${mode}`).classList.add('active');
+  document.getElementById(`${mode}-mode`).classList.add('active');
 }
 
 btnRandom.addEventListener('click', () => switchMode('random'));
 btnBattle.addEventListener('click', () => switchMode('battle'));
+btnCalendar.addEventListener('click', () => switchMode('calendar'));
 
-// === RANDOM / SLOT MACHINE MODE ===
-
+// ── Random / Spin ──
 function spin() {
   if (isSpinning) return;
   isSpinning = true;
-
   resultCard.classList.add('hidden');
-  spinBtn.classList.add('spinning');
 
-  const pool = getFilteredRestaurants();
-  if (pool.length === 0) {
-    slotDisplay.innerHTML = '<div style="color: var(--red);">Inga restauranger matchar filtret!</div>';
+  const pool = getFiltered();
+  if (!pool.length) {
+    slotDisplay.innerHTML = '<div style="color:var(--accent)">Inga restauranger matchar filtret</div>';
     isSpinning = false;
-    spinBtn.classList.remove('spinning');
     return;
   }
 
-  let ticks = 0;
-  const totalTicks = 25 + Math.floor(Math.random() * 10);
-  let speed = 60;
-
-  const interval = setInterval(() => {
-    const rand = getRandomItem(pool);
-    slotDisplay.innerHTML = `<div class="spinning-name">${rand.name}</div>`;
-    ticks++;
-
-    if (ticks > totalTicks * 0.7) {
-      speed += 20;
-    }
-
-    if (ticks >= totalTicks) {
-      clearInterval(interval);
-      showResult(getRandomItem(pool));
-    }
-  }, speed);
-
-  // Use dynamic speed by clearing and restarting
-  let currentTick = 0;
-  let currentSpeed = 60;
-  clearInterval(interval);
+  const total = 20 + Math.floor(Math.random() * 10);
+  let tick = 0, speed = 50;
 
   function doTick() {
-    const rand = getRandomItem(pool);
-    slotDisplay.innerHTML = `<div class="spinning-name">${rand.name}</div>`;
-    currentTick++;
-
-    if (currentTick > totalTicks * 0.6) {
-      currentSpeed = Math.min(currentSpeed + 15, 300);
-    }
-
-    if (currentTick >= totalTicks) {
-      showResult(getRandomItem(pool));
-      return;
-    }
-
-    setTimeout(doTick, currentSpeed);
+    slotDisplay.innerHTML = `<div class="spinning-name">${rand(pool).name}</div>`;
+    tick++;
+    if (tick > total * 0.6) speed = Math.min(speed + 18, 280);
+    if (tick >= total) { showResult(rand(pool)); return; }
+    setTimeout(doTick, speed);
   }
-
   doTick();
 }
 
-function showResult(restaurant) {
+function showResult(r) {
   isSpinning = false;
-  spinBtn.classList.remove('spinning');
-
-  const tagline = getRandomTagline();
-
-  slotDisplay.innerHTML = `<div class="spinning-name" style="animation: none; color: var(--primary);">${restaurant.name}</div>`;
-
+  slotDisplay.innerHTML = `<div class="spinning-name final">${r.name}</div>`;
   resultCard.classList.remove('hidden');
-  resultName.textContent = restaurant.name;
-  resultAddress.textContent = `📍 ${restaurant.address}, Helsingborg`;
-  resultTagline.textContent = tagline;
-
+  resultName.textContent = r.name;
+  resultAddress.textContent = r.address + ', Helsingborg';
+  resultTagline.textContent = getTagline();
+  resultCard.dataset.restaurant = JSON.stringify(r);
   createConfetti(document.getElementById('confetti-container'));
-
-  // Store for maps
-  resultCard.dataset.restaurant = JSON.stringify(restaurant);
+  resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
 
 spinBtn.addEventListener('click', spin);
+document.getElementById('maps-btn').addEventListener('click', () => openMaps(JSON.parse(resultCard.dataset.restaurant)));
+document.getElementById('again-btn').addEventListener('click', spin);
 
-mapsBtn.addEventListener('click', () => {
-  const r = JSON.parse(resultCard.dataset.restaurant);
-  openMaps(r);
-});
+// ── Filter ──
+filterToggle.addEventListener('click', () => filterOptions.classList.toggle('hidden'));
 
-againBtn.addEventListener('click', spin);
-
-// === FILTER ===
-
-filterToggle.addEventListener('click', () => {
-  filterOptions.classList.toggle('hidden');
-  filterToggle.textContent = filterOptions.classList.contains('hidden')
-    ? '⚙️ Filtrera områden'
-    : '⚙️ Dölj filter';
-});
-
-// === BATTLE MODE ===
+// ── Battle ──
+function updateVoteBars() {
+  const total = battleVotes[1] + battleVotes[2];
+  const pct1 = total ? (battleVotes[1] / total) * 100 : 0;
+  const pct2 = total ? (battleVotes[2] / total) * 100 : 0;
+  document.getElementById('vote-bar-1').style.width = pct1 + '%';
+  document.getElementById('vote-bar-2').style.width = pct2 + '%';
+}
 
 function startBattle() {
   const [r1, r2] = getTwoRandom();
@@ -221,121 +188,226 @@ function startBattle() {
   winnerDeclared = false;
 
   document.getElementById('battle-name-1').textContent = r1.name;
-  document.getElementById('battle-address-1').textContent = `📍 ${r1.address}`;
-  document.getElementById('battle-tagline-1').textContent = getRandomTagline();
+  document.getElementById('battle-address-1').textContent = r1.address;
+  document.getElementById('battle-tagline-1').textContent = getTagline();
   document.getElementById('vote-count-1').textContent = '0';
   document.getElementById('battle-arg-1').value = '';
 
   document.getElementById('battle-name-2').textContent = r2.name;
-  document.getElementById('battle-address-2').textContent = `📍 ${r2.address}`;
-  document.getElementById('battle-tagline-2').textContent = getRandomTagline();
+  document.getElementById('battle-address-2').textContent = r2.address;
+  document.getElementById('battle-tagline-2').textContent = getTagline();
   document.getElementById('vote-count-2').textContent = '0';
   document.getElementById('battle-arg-2').value = '';
 
+  updateVoteBars();
   battleArena.classList.remove('hidden');
   battleControls.classList.remove('hidden');
   battleWinner.classList.add('hidden');
-  battleGenerateBtn.querySelector('.spin-text').textContent = '⚔️ NY BATTLE!';
 }
 
 battleGenerateBtn.addEventListener('click', startBattle);
-
-// Voting
-document.getElementById('vote-1').addEventListener('click', () => vote(1));
-document.getElementById('vote-2').addEventListener('click', () => vote(2));
 
 function vote(side) {
   if (winnerDeclared) return;
   battleVotes[side]++;
   document.getElementById(`vote-count-${side}`).textContent = battleVotes[side];
-
-  const btn = document.getElementById(`vote-${side}`);
-  btn.classList.add('voted');
-  setTimeout(() => btn.classList.remove('voted'), 400);
+  updateVoteBars();
 }
 
-// Declare winner
+document.getElementById('vote-1').addEventListener('click', () => vote(1));
+document.getElementById('vote-2').addEventListener('click', () => vote(2));
+
 document.getElementById('battle-declare').addEventListener('click', () => {
   if (winnerDeclared) return;
-
   let winner;
-  if (battleVotes[1] > battleVotes[2]) {
-    winner = battleRestaurants[1];
-  } else if (battleVotes[2] > battleVotes[1]) {
-    winner = battleRestaurants[2];
-  } else {
-    // Tie — random!
-    winner = Math.random() > 0.5 ? battleRestaurants[1] : battleRestaurants[2];
-    showToast('Oavgjort! Ödet fick avgöra... 🎲');
-  }
+  if (battleVotes[1] > battleVotes[2]) winner = battleRestaurants[1];
+  else if (battleVotes[2] > battleVotes[1]) winner = battleRestaurants[2];
+  else { winner = Math.random() > 0.5 ? battleRestaurants[1] : battleRestaurants[2]; showToast('Oavgjort — odet avgor!'); }
 
   winnerDeclared = true;
   document.getElementById('winner-name').textContent = winner.name;
   battleWinner.classList.remove('hidden');
   battleWinner.dataset.restaurant = JSON.stringify(winner);
-
-  // Scroll to winner
   battleWinner.scrollIntoView({ behavior: 'smooth', block: 'center' });
 });
 
-document.getElementById('winner-maps-btn').addEventListener('click', () => {
-  const r = JSON.parse(battleWinner.dataset.restaurant);
-  openMaps(r);
-});
-
-// Reset battle
+document.getElementById('winner-maps-btn').addEventListener('click', () => openMaps(JSON.parse(battleWinner.dataset.restaurant)));
 document.getElementById('battle-reset').addEventListener('click', startBattle);
 
-// Share/Copy
 document.getElementById('battle-share').addEventListener('click', () => {
-  const r1 = battleRestaurants[1];
-  const r2 = battleRestaurants[2];
-  const arg1 = document.getElementById('battle-arg-1').value;
-  const arg2 = document.getElementById('battle-arg-2').value;
-
-  let text = `⚔️ AW BATTLE - Helsingborg ⚔️\n\n`;
-  text += `🔴 ${r1.name} (${r1.address})\n`;
-  text += `   Röster: ${battleVotes[1]}`;
-  if (arg1) text += `\n   "${arg1}"`;
-  text += `\n\n🔵 ${r2.name} (${r2.address})\n`;
-  text += `   Röster: ${battleVotes[2]}`;
-  if (arg2) text += `\n   "${arg2}"`;
-
-  if (winnerDeclared) {
-    const winnerName = document.getElementById('winner-name').textContent;
-    text += `\n\n🏆 VINNARE: ${winnerName}!`;
-  }
-
-  text += '\n\n🍻 Genererad med AW Generator Helsingborg';
-
-  navigator.clipboard.writeText(text).then(() => {
-    showToast('Kopierat till urklipp! 📋');
-  }).catch(() => {
-    showToast('Kunde inte kopiera, försök igen');
-  });
+  const r1 = battleRestaurants[1], r2 = battleRestaurants[2];
+  let text = `AW BATTLE\n\nA: ${r1.name} (${r1.address}) — ${battleVotes[1]} roster\nB: ${r2.name} (${r2.address}) — ${battleVotes[2]} roster`;
+  if (winnerDeclared) text += `\n\nVinnare: ${document.getElementById('winner-name').textContent}`;
+  text += '\n\nawgenerator.helsingborg';
+  navigator.clipboard.writeText(text).then(() => showToast('Kopierat!')).catch(() => showToast('Kunde inte kopiera'));
 });
 
-// === KEYBOARD SHORTCUT — SPACE TO SPIN ===
+// ── Calendar ──
+function getAwDates() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY_DATES)) || []; }
+  catch { return []; }
+}
+
+function saveAwDates(dates) {
+  localStorage.setItem(STORAGE_KEY_DATES, JSON.stringify(dates));
+}
+
+function formatDate(dateStr) {
+  const d = new Date(dateStr);
+  const weekdays = ['sondag', 'mandag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lordag'];
+  const months = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
+  return `${weekdays[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
+}
+
+function formatTime(timeStr) {
+  return timeStr || '16:30';
+}
+
+function getNextAw() {
+  const now = new Date();
+  const dates = getAwDates().filter(d => new Date(d.date + 'T' + (d.time || '16:30')) > now);
+  dates.sort((a, b) => new Date(a.date) - new Date(b.date));
+  return dates[0] || null;
+}
+
+function generateICS(awDate) {
+  const dt = new Date(awDate.date + 'T' + (awDate.time || '16:30'));
+  const end = new Date(dt.getTime() + 2 * 60 * 60 * 1000);
+  const fmt = d => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const note = awDate.note ? awDate.note + ' — ' : '';
+  const ics = [
+    'BEGIN:VCALENDAR',
+    'VERSION:2.0',
+    'PRODID:-//AW Generator//Stadsbyggnadsforvaltningen//SV',
+    'BEGIN:VEVENT',
+    `DTSTART:${fmt(dt)}`,
+    `DTEND:${fmt(end)}`,
+    `SUMMARY:AW — Stadsbyggnadsforvaltningen`,
+    `DESCRIPTION:${note}After Work med Stadsbyggnadsforvaltningen Helsingborg`,
+    `LOCATION:Helsingborg`,
+    'END:VEVENT',
+    'END:VCALENDAR'
+  ].join('\r\n');
+  return ics;
+}
+
+function downloadICS(awDate) {
+  const ics = generateICS(awDate);
+  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `aw-${awDate.date}.ics`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Kalenderhandelse nedladdad!');
+}
+
+function updateCountdown() {
+  const next = getNextAw();
+  const card = document.getElementById('next-aw-card');
+
+  if (!next) {
+    card.innerHTML = '<p class="no-aw">Inga planerade AW. Lagg till ett datum nedan!</p>';
+    return;
+  }
+
+  document.getElementById('next-aw-date').textContent = formatDate(next.date) + ' kl ' + formatTime(next.time);
+
+  const diff = new Date(next.date + 'T' + (next.time || '16:30')) - new Date();
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+  let countdown = '';
+  if (days > 0) countdown = `${days} dagar och ${hours} timmar kvar`;
+  else if (hours > 0) countdown = `${hours} timmar kvar`;
+  else countdown = 'Idag!';
+
+  document.getElementById('next-aw-countdown').textContent = countdown;
+
+  document.getElementById('add-next-to-calendar').onclick = () => downloadICS(next);
+}
+
+function renderCalendar() {
+  const dates = getAwDates();
+  dates.sort((a, b) => new Date(a.date) - new Date(b.date));
+  const list = document.getElementById('aw-list');
+  const now = new Date();
+
+  if (!dates.length) {
+    list.innerHTML = '<p class="no-dates">Inga datum tillagda an.</p>';
+    updateCountdown();
+    return;
+  }
+
+  list.innerHTML = dates.map((d, i) => {
+    const isPast = new Date(d.date + 'T23:59') < now;
+    return `
+      <div class="aw-date-item ${isPast ? 'past' : ''}">
+        <div class="aw-date-info">
+          <span class="aw-date-text">${formatDate(d.date)}</span>
+          <span class="aw-date-time">kl ${formatTime(d.time)}</span>
+          ${d.note ? `<span class="aw-date-note">${d.note}</span>` : ''}
+        </div>
+        <div class="aw-date-actions">
+          <button class="btn-icon" onclick="downloadICS(getAwDates()[${i}])" title="Lagg till i kalender">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </button>
+          <button class="btn-icon btn-icon-danger" onclick="removeAwDate(${i})" title="Ta bort">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>`;
+  }).join('');
+
+  updateCountdown();
+}
+
+function removeAwDate(index) {
+  const dates = getAwDates();
+  dates.splice(index, 1);
+  saveAwDates(dates);
+  renderCalendar();
+  showToast('Datum borttaget');
+}
+
+// Make functions available globally for inline handlers
+window.downloadICS = downloadICS;
+window.getAwDates = getAwDates;
+window.removeAwDate = removeAwDate;
+
+// Add AW date form
+document.getElementById('add-aw-btn').addEventListener('click', () => {
+  document.getElementById('add-aw-form').classList.remove('hidden');
+});
+
+document.getElementById('cancel-aw-btn').addEventListener('click', () => {
+  document.getElementById('add-aw-form').classList.add('hidden');
+});
+
+document.getElementById('save-aw-btn').addEventListener('click', () => {
+  const date = document.getElementById('new-aw-date').value;
+  const time = document.getElementById('new-aw-time').value || '16:30';
+  const note = document.getElementById('new-aw-note').value;
+
+  if (!date) { showToast('Valj ett datum'); return; }
+
+  const dates = getAwDates();
+  dates.push({ date, time, note });
+  saveAwDates(dates);
+
+  document.getElementById('new-aw-date').value = '';
+  document.getElementById('new-aw-note').value = '';
+  document.getElementById('add-aw-form').classList.add('hidden');
+
+  renderCalendar();
+  showToast('AW-datum tillagt!');
+});
+
+// ── Keyboard shortcut ──
 document.addEventListener('keydown', (e) => {
-  if (e.code === 'Space' && currentMode === 'random' && !isSpinning) {
-    // Don't spin if user is typing in battle mode textareas
-    if (document.activeElement.tagName === 'TEXTAREA') return;
+  if (e.code === 'Space' && currentMode === 'random' && !isSpinning && document.activeElement.tagName !== 'TEXTAREA' && document.activeElement.tagName !== 'INPUT') {
     e.preventDefault();
     spin();
-  }
-});
-
-// === FUN EASTER EGG — Konami-ish (type "aw") ===
-let konamiBuffer = '';
-document.addEventListener('keydown', (e) => {
-  if (document.activeElement.tagName === 'TEXTAREA') return;
-  konamiBuffer += e.key.toLowerCase();
-  if (konamiBuffer.length > 10) konamiBuffer = konamiBuffer.slice(-10);
-  if (konamiBuffer.endsWith('aw')) {
-    showToast('🍻 AW-läge aktiverat! Let\'s gooo!');
-    document.querySelector('.title-aw').style.animation = 'shimmer 0.5s linear infinite';
-    setTimeout(() => {
-      document.querySelector('.title-aw').style.animation = 'shimmer 3s linear infinite';
-    }, 3000);
   }
 });

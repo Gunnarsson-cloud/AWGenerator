@@ -3,165 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AW Generator - Helsingborg</title>
+    <title>AW Generator — Stadsbyggnadsforvaltningen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bg-decorations">
-        <div class="bubble bubble-1">🍺</div>
-        <div class="bubble bubble-2">🍷</div>
-        <div class="bubble bubble-3">🥂</div>
-        <div class="bubble bubble-4">🍹</div>
-        <div class="bubble bubble-5">🎉</div>
-        <div class="bubble bubble-6">🍻</div>
-        <div class="bubble bubble-7">🥳</div>
-        <div class="bubble bubble-8">🎊</div>
+
+    <!-- PASSWORD GATE -->
+    <div class="login-gate" id="login-gate">
+        <div class="login-card">
+            <img src="hbg-logo.svg" alt="Helsingborgs stad" class="login-logo">
+            <h2 class="login-title">AW Generator</h2>
+            <p class="login-sub">Stadsbyggnadsforvaltningen</p>
+            <form id="login-form" autocomplete="off">
+                <input type="password" id="login-input" class="login-input" placeholder="Ange losenord..." autofocus>
+                <button type="submit" class="btn-primary login-btn">Logga in</button>
+                <p class="login-error hidden" id="login-error">Fel losenord. Forsok igen.</p>
+            </form>
+        </div>
     </div>
 
-    <header>
-        <div class="org-banner">
-            <img src="hbg-logo.svg" alt="Helsingborgs stad" class="hbg-logo">
-            <div class="org-text">
-                <span class="org-name">Helsingborgs stad</span>
-                <span class="org-dept">Stadsbyggnadsförvaltningen</span>
+    <!-- APP (hidden until authenticated) -->
+    <div class="app-container hidden" id="app">
+        <header>
+            <div class="org-banner">
+                <img src="hbg-logo.svg" alt="Helsingborgs stad" class="hbg-logo">
+                <div class="org-text">
+                    <span class="org-name">Helsingborgs stad</span>
+                    <span class="org-dept">Stadsbyggnadsforvaltningen</span>
+                </div>
             </div>
-        </div>
-        <h1 class="title">
-            <span class="title-aw">AW</span>
-            <span class="title-generator">GENERATOR</span>
-        </h1>
-        <p class="subtitle">Stadsbyggnadsförvaltningens officiella After Work-slumpare</p>
-        <p class="tagline">Sluta tjafsa om vart ni ska — låt ödet bestämma! 🎲</p>
-    </header>
 
-    <nav class="mode-switcher">
-        <button class="mode-btn active" data-mode="random" id="btn-random">
-            <span class="mode-icon">🎰</span>
-            <span class="mode-label">Slumpa AW</span>
-        </button>
-        <button class="mode-btn" data-mode="battle" id="btn-battle">
-            <span class="mode-icon">⚔️</span>
-            <span class="mode-label">AW Battle</span>
-        </button>
-    </nav>
+            <div class="hero">
+                <span class="hero-pill">After Work Generator</span>
+                <h1 class="hero-title">Vart gar vi <span class="hero-highlight">ikvall?</span></h1>
+                <p class="hero-sub">Sluta tjafsa om vart ni ska. Lat odet bestamma.</p>
+            </div>
 
-    <!-- RANDOM MODE -->
-    <section id="random-mode" class="mode-section active">
-        <div class="slot-machine">
-            <div class="slot-frame">
-                <div class="slot-display" id="slot-display">
-                    <div class="slot-placeholder">
-                        <span class="placeholder-emoji">👆</span>
-                        <span>Tryck på knappen!</span>
+            <nav class="tabs">
+                <button class="tab active" data-mode="random" id="btn-random">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg>
+                    Slumpa
+                </button>
+                <button class="tab" data-mode="battle" id="btn-battle">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                    Battle
+                </button>
+                <button class="tab" data-mode="calendar" id="btn-calendar">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    Kalender
+                </button>
+            </nav>
+        </header>
+
+        <!-- RANDOM MODE -->
+        <section id="random-mode" class="mode-section active">
+            <div class="random-display" id="slot-display">
+                <div class="random-placeholder" id="random-placeholder">
+                    <div class="placeholder-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="8" cy="16" r="1.5"/><circle cx="16" cy="8" r="1.5"/><circle cx="12" cy="12" r="1.5"/></svg>
+                    </div>
+                    <span>Tryck for att slumpa ett AW-stalle</span>
+                </div>
+            </div>
+
+            <button class="btn-primary" id="spin-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/></svg>
+                Slumpa AW
+            </button>
+
+            <div class="result-card hidden" id="result-card">
+                <div class="confetti-container" id="confetti-container"></div>
+                <span class="result-label">Kvallens AW</span>
+                <h2 class="result-name" id="result-name"></h2>
+                <p class="result-address" id="result-address"></p>
+                <div class="result-tagline" id="result-tagline"></div>
+                <div class="result-actions">
+                    <button class="btn-secondary" id="maps-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                        Visa pa karta
+                    </button>
+                    <button class="btn-ghost" id="again-btn">Slumpa igen</button>
+                </div>
+            </div>
+
+            <div class="filter-bar">
+                <button class="btn-filter" id="filter-toggle">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    Filter
+                </button>
+                <div class="filter-chips hidden" id="filter-options">
+                    <label class="chip"><input type="checkbox" value="centrum" checked><span>Centrum</span></label>
+                    <label class="chip"><input type="checkbox" value="hamnen" checked><span>Hamnen</span></label>
+                    <label class="chip"><input type="checkbox" value="söder" checked><span>Soder</span></label>
+                    <label class="chip"><input type="checkbox" value="norr" checked><span>Norr / Tagaborg</span></label>
+                    <label class="chip"><input type="checkbox" value="övrigt" checked><span>Ovrigt</span></label>
+                </div>
+            </div>
+        </section>
+
+        <!-- BATTLE MODE -->
+        <section id="battle-mode" class="mode-section">
+            <p class="battle-intro">Slumpa tva stallen, rosta och lat demokratin avgora.</p>
+
+            <button class="btn-primary" id="battle-generate-btn">Starta Battle</button>
+
+            <div class="battle-arena hidden" id="battle-arena">
+                <div class="battle-card battle-left" id="battle-left">
+                    <div class="battle-indicator">A</div>
+                    <h3 class="battle-name" id="battle-name-1"></h3>
+                    <p class="battle-address" id="battle-address-1"></p>
+                    <div class="battle-tagline" id="battle-tagline-1"></div>
+                    <textarea class="battle-argument" id="battle-arg-1" placeholder="Varfor ska vi ga hit?"></textarea>
+                    <button class="vote-btn vote-left" id="vote-1">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                        <span class="vote-count" id="vote-count-1">0</span>
+                    </button>
+                    <div class="vote-bar-track"><div class="vote-bar vote-bar-left" id="vote-bar-1"></div></div>
+                </div>
+
+                <div class="battle-vs">VS</div>
+
+                <div class="battle-card battle-right" id="battle-right">
+                    <div class="battle-indicator">B</div>
+                    <h3 class="battle-name" id="battle-name-2"></h3>
+                    <p class="battle-address" id="battle-address-2"></p>
+                    <div class="battle-tagline" id="battle-tagline-2"></div>
+                    <textarea class="battle-argument" id="battle-arg-2" placeholder="Varfor ska vi ga hit?"></textarea>
+                    <button class="vote-btn vote-right" id="vote-2">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
+                        <span class="vote-count" id="vote-count-2">0</span>
+                    </button>
+                    <div class="vote-bar-track"><div class="vote-bar vote-bar-right" id="vote-bar-2"></div></div>
+                </div>
+            </div>
+
+            <div class="battle-winner hidden" id="battle-winner">
+                <span class="winner-label">Vinnare</span>
+                <h2 class="winner-name" id="winner-name"></h2>
+                <button class="btn-secondary" id="winner-maps-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                    Visa pa karta
+                </button>
+            </div>
+
+            <div class="battle-controls hidden" id="battle-controls">
+                <button class="btn-ghost" id="battle-reset">Ny battle</button>
+                <button class="btn-primary btn-sm" id="battle-declare">Utse vinnare</button>
+                <button class="btn-ghost" id="battle-share">Kopiera resultat</button>
+            </div>
+        </section>
+
+        <!-- CALENDAR MODE -->
+        <section id="calendar-mode" class="mode-section">
+            <div class="calendar-header">
+                <h2 class="calendar-title">Kommande AW</h2>
+                <p class="calendar-sub">Planerade After Work-tillfallen for Stadsbyggnadsforvaltningen</p>
+            </div>
+
+            <div class="next-aw-card" id="next-aw-card">
+                <span class="next-aw-label">Nasta AW</span>
+                <div class="next-aw-date" id="next-aw-date"></div>
+                <div class="next-aw-countdown" id="next-aw-countdown"></div>
+                <button class="btn-secondary" id="add-next-to-calendar">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg>
+                    Lagg till i kalender
+                </button>
+            </div>
+
+            <div class="aw-list" id="aw-list"></div>
+
+            <div class="calendar-admin">
+                <button class="btn-ghost" id="add-aw-btn">+ Lagg till nytt AW-datum</button>
+                <div class="add-aw-form hidden" id="add-aw-form">
+                    <input type="date" id="new-aw-date" class="form-input">
+                    <input type="time" id="new-aw-time" class="form-input" value="16:30">
+                    <input type="text" id="new-aw-note" class="form-input" placeholder="Notering (valfritt)">
+                    <div class="form-actions">
+                        <button class="btn-primary btn-sm" id="save-aw-btn">Spara</button>
+                        <button class="btn-ghost" id="cancel-aw-btn">Avbryt</button>
                     </div>
                 </div>
             </div>
-            <button class="spin-btn" id="spin-btn">
-                <span class="spin-text">SNURRA!</span>
-                <span class="spin-sub">Tryck för att slumpa AW</span>
-            </button>
-        </div>
+        </section>
 
-        <div class="result-card hidden" id="result-card">
-            <div class="result-confetti" id="confetti-container"></div>
-            <div class="result-badge">🏆 KVÄLLENS AW</div>
-            <h2 class="result-name" id="result-name"></h2>
-            <p class="result-address" id="result-address"></p>
-            <div class="result-tagline" id="result-tagline"></div>
-            <div class="result-actions">
-                <button class="action-btn maps-btn" id="maps-btn">📍 Visa på karta</button>
-                <button class="action-btn again-btn" id="again-btn">🎲 Slumpa igen!</button>
-            </div>
-        </div>
-
-        <div class="filter-section">
-            <button class="filter-toggle" id="filter-toggle">⚙️ Filtrera områden</button>
-            <div class="filter-options hidden" id="filter-options">
-                <label class="filter-chip">
-                    <input type="checkbox" value="centrum" checked> 🏙️ Centrum
-                </label>
-                <label class="filter-chip">
-                    <input type="checkbox" value="hamnen" checked> ⚓ Hamnen
-                </label>
-                <label class="filter-chip">
-                    <input type="checkbox" value="söder" checked> 🌅 Söder
-                </label>
-                <label class="filter-chip">
-                    <input type="checkbox" value="norr" checked> 🌿 Norr/Tågaborg
-                </label>
-                <label class="filter-chip">
-                    <input type="checkbox" value="övrigt" checked> 📍 Övrigt
-                </label>
-            </div>
-        </div>
-    </section>
-
-    <!-- BATTLE MODE -->
-    <section id="battle-mode" class="mode-section">
-        <p class="battle-intro">Kan ni inte bestämma er? Låt demokratin avgöra! Slumpa två ställen och rösta — eller beskriv varför just ert ställe är bäst! ⚔️</p>
-
-        <button class="spin-btn battle-generate-btn" id="battle-generate-btn">
-            <span class="spin-text">⚔️ STARTA BATTLE!</span>
-            <span class="spin-sub">Slumpa två ställen att rösta om</span>
-        </button>
-
-        <div class="battle-arena hidden" id="battle-arena">
-            <div class="battle-vs-label">VS</div>
-
-            <div class="battle-card battle-left" id="battle-left">
-                <div class="battle-corner">🔴</div>
-                <h3 class="battle-name" id="battle-name-1"></h3>
-                <p class="battle-address" id="battle-address-1"></p>
-                <div class="battle-tagline" id="battle-tagline-1"></div>
-                <textarea class="battle-argument" id="battle-arg-1" placeholder="Varför ska vi gå hit? Beskriv med egna ord..."></textarea>
-                <div class="battle-vote-section">
-                    <button class="vote-btn vote-left" id="vote-1">
-                        <span class="vote-emoji">👍</span>
-                        <span class="vote-count" id="vote-count-1">0</span>
-                    </button>
-                </div>
-            </div>
-
-            <div class="battle-card battle-right" id="battle-right">
-                <div class="battle-corner">🔵</div>
-                <h3 class="battle-name" id="battle-name-2"></h3>
-                <p class="battle-address" id="battle-address-2"></p>
-                <div class="battle-tagline" id="battle-tagline-2"></div>
-                <textarea class="battle-argument" id="battle-arg-2" placeholder="Varför ska vi gå hit? Beskriv med egna ord..."></textarea>
-                <div class="battle-vote-section">
-                    <button class="vote-btn vote-right" id="vote-2">
-                        <span class="vote-emoji">👍</span>
-                        <span class="vote-count" id="vote-count-2">0</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <div class="battle-winner hidden" id="battle-winner">
-            <div class="winner-trophy">🏆</div>
-            <h3>VINNAREN ÄR...</h3>
-            <h2 class="winner-name" id="winner-name"></h2>
-            <button class="action-btn maps-btn" id="winner-maps-btn">📍 Visa på karta</button>
-        </div>
-
-        <div class="battle-controls hidden" id="battle-controls">
-            <button class="action-btn" id="battle-reset">🔄 Ny battle</button>
-            <button class="action-btn" id="battle-declare">🏆 Utse vinnare!</button>
-            <button class="action-btn share-btn" id="battle-share">📋 Kopiera resultat</button>
-        </div>
-    </section>
-
-    <footer>
-        <div class="footer-logo">
-            <img src="hbg-logo.svg" alt="Helsingborgs stad" class="hbg-logo-footer">
-        </div>
-        <p>🍻 Skapad med kärlek för Stadsbyggnadsförvaltningens AW-kommitté</p>
-        <p class="footer-dept">Helsingborgs stad — Stadsbyggnadsförvaltningen</p>
-        <p class="footer-small">Restaurangdata från <a href="https://tillstandsenheten.helsingborg.se/AlkTWebbforms/Restaurants" target="_blank">Tillståndsenheten Helsingborg</a></p>
-    </footer>
+        <footer>
+            <img src="hbg-logo.svg" alt="Helsingborgs stad" class="footer-logo">
+            <p>Stadsbyggnadsforvaltningen — Helsingborgs stad</p>
+            <p class="footer-source">Restaurangdata fran <a href="https://tillstandsenheten.helsingborg.se/AlkTWebbforms/Restaurants" target="_blank">Tillstandsenheten</a></p>
+        </footer>
+    </div>
 
     <script src="restaurants.js"></script>
     <script src="app.js"></script>
