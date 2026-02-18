@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AW Generator - Helsingborg</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="bg-decorations">
+        <div class="bubble bubble-1">🍺</div>
+        <div class="bubble bubble-2">🍷</div>
+        <div class="bubble bubble-3">🥂</div>
+        <div class="bubble bubble-4">🍹</div>
+        <div class="bubble bubble-5">🎉</div>
+        <div class="bubble bubble-6">🍻</div>
+        <div class="bubble bubble-7">🥳</div>
+        <div class="bubble bubble-8">🎊</div>
+    </div>
+
+    <header>
+        <h1 class="title">
+            <span class="title-aw">AW</span>
+            <span class="title-generator">GENERATOR</span>
+        </h1>
+        <p class="subtitle">Helsingborgs Stads officiella After Work-slumpare</p>
+        <p class="tagline">Sluta tjafsa om vart ni ska — låt ödet bestämma! 🎲</p>
+    </header>
+
+    <nav class="mode-switcher">
+        <button class="mode-btn active" data-mode="random" id="btn-random">
+            <span class="mode-icon">🎰</span>
+            <span class="mode-label">Slumpa AW</span>
+        </button>
+        <button class="mode-btn" data-mode="battle" id="btn-battle">
+            <span class="mode-icon">⚔️</span>
+            <span class="mode-label">AW Battle</span>
+        </button>
+    </nav>
+
+    <!-- RANDOM MODE -->
+    <section id="random-mode" class="mode-section active">
+        <div class="slot-machine">
+            <div class="slot-frame">
+                <div class="slot-display" id="slot-display">
+                    <div class="slot-placeholder">
+                        <span class="placeholder-emoji">👆</span>
+                        <span>Tryck på knappen!</span>
+                    </div>
+                </div>
+            </div>
+            <button class="spin-btn" id="spin-btn">
+                <span class="spin-text">SNURRA!</span>
+                <span class="spin-sub">Tryck för att slumpa AW</span>
+            </button>
+        </div>
+
+        <div class="result-card hidden" id="result-card">
+            <div class="result-confetti" id="confetti-container"></div>
+            <div class="result-badge">🏆 KVÄLLENS AW</div>
+            <h2 class="result-name" id="result-name"></h2>
+            <p class="result-address" id="result-address"></p>
+            <div class="result-tagline" id="result-tagline"></div>
+            <div class="result-actions">
+                <button class="action-btn maps-btn" id="maps-btn">📍 Visa på karta</button>
+                <button class="action-btn again-btn" id="again-btn">🎲 Slumpa igen!</button>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <button class="filter-toggle" id="filter-toggle">⚙️ Filtrera områden</button>
+            <div class="filter-options hidden" id="filter-options">
+                <label class="filter-chip">
+                    <input type="checkbox" value="centrum" checked> 🏙️ Centrum
+                </label>
+                <label class="filter-chip">
+                    <input type="checkbox" value="hamnen" checked> ⚓ Hamnen
+                </label>
+                <label class="filter-chip">
+                    <input type="checkbox" value="söder" checked> 🌅 Söder
+                </label>
+                <label class="filter-chip">
+                    <input type="checkbox" value="norr" checked> 🌿 Norr/Tågaborg
+                </label>
+                <label class="filter-chip">
+                    <input type="checkbox" value="övrigt" checked> 📍 Övrigt
+                </label>
+            </div>
+        </div>
+    </section>
+
+    <!-- BATTLE MODE -->
+    <section id="battle-mode" class="mode-section">
+        <p class="battle-intro">Kan ni inte bestämma er? Låt demokratin avgöra! Slumpa två ställen och rösta — eller beskriv varför just ert ställe är bäst! ⚔️</p>
+
+        <button class="spin-btn battle-generate-btn" id="battle-generate-btn">
+            <span class="spin-text">⚔️ STARTA BATTLE!</span>
+            <span class="spin-sub">Slumpa två ställen att rösta om</span>
+        </button>
+
+        <div class="battle-arena hidden" id="battle-arena">
+            <div class="battle-vs-label">VS</div>
+
+            <div class="battle-card battle-left" id="battle-left">
+                <div class="battle-corner">🔴</div>
+                <h3 class="battle-name" id="battle-name-1"></h3>
+                <p class="battle-address" id="battle-address-1"></p>
+                <div class="battle-tagline" id="battle-tagline-1"></div>
+                <textarea class="battle-argument" id="battle-arg-1" placeholder="Varför ska vi gå hit? Beskriv med egna ord..."></textarea>
+                <div class="battle-vote-section">
+                    <button class="vote-btn vote-left" id="vote-1">
+                        <span class="vote-emoji">👍</span>
+                        <span class="vote-count" id="vote-count-1">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="battle-card battle-right" id="battle-right">
+                <div class="battle-corner">🔵</div>
+                <h3 class="battle-name" id="battle-name-2"></h3>
+                <p class="battle-address" id="battle-address-2"></p>
+                <div class="battle-tagline" id="battle-tagline-2"></div>
+                <textarea class="battle-argument" id="battle-arg-2" placeholder="Varför ska vi gå hit? Beskriv med egna ord..."></textarea>
+                <div class="battle-vote-section">
+                    <button class="vote-btn vote-right" id="vote-2">
+                        <span class="vote-emoji">👍</span>
+                        <span class="vote-count" id="vote-count-2">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="battle-winner hidden" id="battle-winner">
+            <div class="winner-trophy">🏆</div>
+            <h3>VINNAREN ÄR...</h3>
+            <h2 class="winner-name" id="winner-name"></h2>
+            <button class="action-btn maps-btn" id="winner-maps-btn">📍 Visa på karta</button>
+        </div>
+
+        <div class="battle-controls hidden" id="battle-controls">
+            <button class="action-btn" id="battle-reset">🔄 Ny battle</button>
+            <button class="action-btn" id="battle-declare">🏆 Utse vinnare!</button>
+            <button class="action-btn share-btn" id="battle-share">📋 Kopiera resultat</button>
+        </div>
+    </section>
+
+    <footer>
+        <p>🍻 Skapad med kärlek för Helsingborgs Stads AW-kommitté</p>
+        <p class="footer-small">Restaurangdata från <a href="https://tillstandsenheten.helsingborg.se/AlkTWebbforms/Restaurants" target="_blank">Tillståndsenheten Helsingborg</a></p>
+    </footer>
+
+    <script src="restaurants.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
