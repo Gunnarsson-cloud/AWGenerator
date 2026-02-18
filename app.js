@@ -85,6 +85,22 @@ function openMaps(r) {
   window.open(`https://www.google.com/maps/search/?api=1&query=${q}`, '_blank');
 }
 
+function getMapsEmbedUrl(r) {
+  const q = encodeURIComponent(`${r.name}, ${r.address}, Helsingborg, Sweden`);
+  return `https://www.google.com/maps?q=${q}&output=embed`;
+}
+
+function getTransportInfo(r) {
+  const info = {
+    centrum: { walk: '3–7 min', transport: 'Helsingborg C / Knutpunkten', icon: '🚶' },
+    hamnen:  { walk: '5–12 min', transport: 'Helsingborg C / Ångfärjan', icon: '🚶' },
+    söder:   { walk: '10–20 min', transport: 'Söder (buss 1, 7)', icon: '🚌' },
+    norr:    { walk: '12–20 min', transport: 'Tågaborg / Hälsovägen (buss 2)', icon: '🚌' },
+    övrigt:  { walk: '20+ min', transport: 'Se karta för hållplats', icon: '🚌' }
+  };
+  return info[r.area] || info.övrigt;
+}
+
 function showToast(msg) {
   const old = document.querySelector('.toast');
   if (old) old.remove();
@@ -161,6 +177,17 @@ function showResult(r) {
   resultAddress.textContent = r.address + ', Helsingborg';
   resultTagline.textContent = getTagline();
   resultCard.dataset.restaurant = JSON.stringify(r);
+
+  // Transport info
+  const ti = getTransportInfo(r);
+  document.getElementById('result-transport').innerHTML = `
+    <div class="transport-row"><span class="transport-icon">🚂</span><span><strong>Från Helsingborg C:</strong> ${ti.walk} promenad</span></div>
+    <div class="transport-row"><span class="transport-icon">${ti.icon}</span><span><strong>Närmaste hållplats:</strong> ${ti.transport}</span></div>
+  `;
+
+  // Map
+  document.getElementById('result-map').innerHTML = `<iframe src="${getMapsEmbedUrl(r)}" class="map-iframe" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+
   createConfetti(document.getElementById('confetti-container'));
   resultCard.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
 }
@@ -296,6 +323,15 @@ document.getElementById('battle-declare').addEventListener('click', () => {
 
   winnerDeclared = true;
   document.getElementById('winner-name').textContent = winner.name;
+
+  // Transport info for winner
+  const ti = getTransportInfo(winner);
+  document.getElementById('winner-transport').innerHTML = `
+    <div class="transport-row"><span class="transport-icon">🚂</span><span><strong>Från Helsingborg C:</strong> ${ti.walk} promenad</span></div>
+    <div class="transport-row"><span class="transport-icon">${ti.icon}</span><span><strong>Närmaste hållplats:</strong> ${ti.transport}</span></div>
+  `;
+  document.getElementById('winner-map').innerHTML = `<iframe src="${getMapsEmbedUrl(winner)}" class="map-iframe" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>`;
+
   battleWinner.classList.remove('hidden');
   battleWinner.dataset.restaurant = JSON.stringify(winner);
   battleWinner.scrollIntoView({ behavior: 'smooth', block: 'center' });

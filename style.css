@@ -332,6 +332,52 @@ header { margin-bottom: 2rem; }
   flex-wrap: wrap;
 }
 
+/* === TRANSPORT INFO === */
+.transport-info {
+  background: var(--bg-elevated);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin: 1rem 0;
+  text-align: left;
+}
+
+.transport-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  padding: 0.3rem 0;
+}
+
+.transport-row strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.transport-icon {
+  font-size: 1rem;
+  flex-shrink: 0;
+  width: 1.5rem;
+  text-align: center;
+}
+
+/* === MAP === */
+.map-container {
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin: 0.75rem 0;
+  border: 1px solid var(--border-subtle);
+}
+
+.map-iframe {
+  width: 100%;
+  height: 200px;
+  border: none;
+  display: block;
+  filter: grayscale(0.3) brightness(0.85);
+}
+
 /* === FILTER === */
 .filter-bar {
   text-align: center;
