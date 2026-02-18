@@ -76,6 +76,50 @@ header {
   z-index: 1;
 }
 
+/* === ORG BANNER (Logo + Department) === */
+.org-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0.8rem 1.5rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+  backdrop-filter: blur(8px);
+}
+
+.hbg-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.org-text {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  gap: 0.1rem;
+}
+
+.org-name {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-light);
+  letter-spacing: 0.02em;
+}
+
+.org-dept {
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .title {
   font-family: 'Bangers', cursive;
   display: flex;
@@ -717,6 +761,30 @@ footer {
   font-size: 0.85rem;
   position: relative;
   z-index: 1;
+}
+
+.footer-logo {
+  margin-bottom: 0.8rem;
+}
+
+.hbg-logo-footer {
+  width: 48px;
+  height: 48px;
+  border-radius: 8px;
+  opacity: 0.7;
+  transition: opacity 0.3s;
+}
+
+.hbg-logo-footer:hover {
+  opacity: 1;
+}
+
+.footer-dept {
+  font-size: 0.8rem;
+  color: var(--accent);
+  font-weight: 600;
+  margin-top: 0.2rem;
+  margin-bottom: 0.3rem;
 }
 
 .footer-small {
