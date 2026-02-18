@@ -179,16 +179,18 @@ function setupBattleSearch(side) {
   const input = document.getElementById(`battle-search-${side}`);
   const dropdown = document.getElementById(`battle-dropdown-${side}`);
 
+  const allSorted = [...RESTAURANTS].sort((a, b) => a.name.localeCompare(b.name, 'sv'));
+
   function renderOptions(filter) {
     const q = filter.toLowerCase().trim();
     const matches = q
-      ? RESTAURANTS.filter(r => r.name.toLowerCase().includes(q) || r.address.toLowerCase().includes(q) || r.area.toLowerCase().includes(q))
-      : RESTAURANTS.slice(0, 30);
+      ? allSorted.filter(r => r.name.toLowerCase().includes(q) || r.address.toLowerCase().includes(q) || r.area.toLowerCase().includes(q))
+      : allSorted;
 
     if (!matches.length) {
       dropdown.innerHTML = '<div class="search-select-option" style="color:var(--text-dim);cursor:default">Inga träffar</div>';
     } else {
-      dropdown.innerHTML = matches.slice(0, 30).map((r, i) =>
+      dropdown.innerHTML = matches.map(r =>
         `<div class="search-select-option" data-index="${RESTAURANTS.indexOf(r)}">${r.name} <span class="option-area">${r.area}</span></div>`
       ).join('');
     }
