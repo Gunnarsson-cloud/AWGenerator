@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AW Generator — Stadsbyggnadsforvaltningen</title>
+    <title>AW Generator — Stadsbyggnadsförvaltningen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
@@ -16,11 +16,11 @@
         <div class="login-card">
             <img src="hbg-logo.svg" alt="Helsingborgs stad" class="login-logo">
             <h2 class="login-title">AW Generator</h2>
-            <p class="login-sub">Stadsbyggnadsforvaltningen</p>
+            <p class="login-sub">Stadsbyggnadsförvaltningen</p>
             <form id="login-form" autocomplete="off">
-                <input type="password" id="login-input" class="login-input" placeholder="Ange losenord..." autofocus>
+                <input type="password" id="login-input" class="login-input" placeholder="Ange lösenord..." autofocus>
                 <button type="submit" class="btn-primary login-btn">Logga in</button>
-                <p class="login-error hidden" id="login-error">Fel losenord. Forsok igen.</p>
+                <p class="login-error hidden" id="login-error">Fel lösenord. Försök igen.</p>
             </form>
         </div>
     </div>
@@ -32,14 +32,14 @@
                 <img src="hbg-logo.svg" alt="Helsingborgs stad" class="hbg-logo">
                 <div class="org-text">
                     <span class="org-name">Helsingborgs stad</span>
-                    <span class="org-dept">Stadsbyggnadsforvaltningen</span>
+                    <span class="org-dept">Stadsbyggnadsförvaltningen</span>
                 </div>
             </div>
 
             <div class="hero">
                 <span class="hero-pill">After Work Generator</span>
-                <h1 class="hero-title">Vart gar vi <span class="hero-highlight">ikvall?</span></h1>
-                <p class="hero-sub">Sluta tjafsa om vart ni ska. Lat odet bestamma.</p>
+                <h1 class="hero-title">Vart går vi <span class="hero-highlight">ikväll?</span></h1>
+                <p class="hero-sub">Sluta tjafsa om vart ni ska. Låt ödet bestämma.</p>
             </div>
 
             <nav class="tabs">
@@ -65,7 +65,7 @@
                     <div class="placeholder-icon">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.3"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="8" cy="8" r="1.5"/><circle cx="16" cy="16" r="1.5"/><circle cx="8" cy="16" r="1.5"/><circle cx="16" cy="8" r="1.5"/><circle cx="12" cy="12" r="1.5"/></svg>
                     </div>
-                    <span>Tryck for att slumpa ett AW-stalle</span>
+                    <span>Tryck för att slumpa ett AW-ställe</span>
                 </div>
             </div>
 
@@ -76,14 +76,14 @@
 
             <div class="result-card hidden" id="result-card">
                 <div class="confetti-container" id="confetti-container"></div>
-                <span class="result-label">Kvallens AW</span>
+                <span class="result-label">Kvällens AW</span>
                 <h2 class="result-name" id="result-name"></h2>
                 <p class="result-address" id="result-address"></p>
                 <div class="result-tagline" id="result-tagline"></div>
                 <div class="result-actions">
                     <button class="btn-secondary" id="maps-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                        Visa pa karta
+                        Visa på karta
                     </button>
                     <button class="btn-ghost" id="again-btn">Slumpa igen</button>
                 </div>
@@ -97,16 +97,16 @@
                 <div class="filter-chips hidden" id="filter-options">
                     <label class="chip"><input type="checkbox" value="centrum" checked><span>Centrum</span></label>
                     <label class="chip"><input type="checkbox" value="hamnen" checked><span>Hamnen</span></label>
-                    <label class="chip"><input type="checkbox" value="söder" checked><span>Soder</span></label>
-                    <label class="chip"><input type="checkbox" value="norr" checked><span>Norr / Tagaborg</span></label>
-                    <label class="chip"><input type="checkbox" value="övrigt" checked><span>Ovrigt</span></label>
+                    <label class="chip"><input type="checkbox" value="söder" checked><span>Söder</span></label>
+                    <label class="chip"><input type="checkbox" value="norr" checked><span>Norr / Tågaborg</span></label>
+                    <label class="chip"><input type="checkbox" value="övrigt" checked><span>Övrigt</span></label>
                 </div>
             </div>
         </section>
 
         <!-- BATTLE MODE -->
         <section id="battle-mode" class="mode-section">
-            <p class="battle-intro">Slumpa tva stallen, rosta och lat demokratin avgora.</p>
+            <p class="battle-intro">Slumpa två ställen, rösta och låt demokratin avgöra.</p>
 
             <button class="btn-primary" id="battle-generate-btn">Starta Battle</button>
 
@@ -116,7 +116,7 @@
                     <h3 class="battle-name" id="battle-name-1"></h3>
                     <p class="battle-address" id="battle-address-1"></p>
                     <div class="battle-tagline" id="battle-tagline-1"></div>
-                    <textarea class="battle-argument" id="battle-arg-1" placeholder="Varfor ska vi ga hit?"></textarea>
+                    <textarea class="battle-argument" id="battle-arg-1" placeholder="Varför ska vi gå hit?"></textarea>
                     <button class="vote-btn vote-left" id="vote-1">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
                         <span class="vote-count" id="vote-count-1">0</span>
@@ -131,7 +131,7 @@
                     <h3 class="battle-name" id="battle-name-2"></h3>
                     <p class="battle-address" id="battle-address-2"></p>
                     <div class="battle-tagline" id="battle-tagline-2"></div>
-                    <textarea class="battle-argument" id="battle-arg-2" placeholder="Varfor ska vi ga hit?"></textarea>
+                    <textarea class="battle-argument" id="battle-arg-2" placeholder="Varför ska vi gå hit?"></textarea>
                     <button class="vote-btn vote-right" id="vote-2">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg>
                         <span class="vote-count" id="vote-count-2">0</span>
@@ -145,7 +145,7 @@
                 <h2 class="winner-name" id="winner-name"></h2>
                 <button class="btn-secondary" id="winner-maps-btn">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
-                    Visa pa karta
+                    Visa på karta
                 </button>
             </div>
 
@@ -160,23 +160,23 @@
         <section id="calendar-mode" class="mode-section">
             <div class="calendar-header">
                 <h2 class="calendar-title">Kommande AW</h2>
-                <p class="calendar-sub">Planerade After Work-tillfallen for Stadsbyggnadsforvaltningen</p>
+                <p class="calendar-sub">Planerade After Work-tillfällen för Stadsbyggnadsförvaltningen</p>
             </div>
 
             <div class="next-aw-card" id="next-aw-card">
-                <span class="next-aw-label">Nasta AW</span>
+                <span class="next-aw-label">Nästa AW</span>
                 <div class="next-aw-date" id="next-aw-date"></div>
                 <div class="next-aw-countdown" id="next-aw-countdown"></div>
                 <button class="btn-secondary" id="add-next-to-calendar">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="12" y1="14" x2="12" y2="18"/><line x1="10" y1="16" x2="14" y2="16"/></svg>
-                    Lagg till i kalender
+                    Lägg till i kalender
                 </button>
             </div>
 
             <div class="aw-list" id="aw-list"></div>
 
             <div class="calendar-admin">
-                <button class="btn-ghost" id="add-aw-btn">+ Lagg till nytt AW-datum</button>
+                <button class="btn-ghost" id="add-aw-btn">+ Lägg till nytt AW-datum</button>
                 <div class="add-aw-form hidden" id="add-aw-form">
                     <input type="date" id="new-aw-date" class="form-input">
                     <input type="time" id="new-aw-time" class="form-input" value="16:30">
@@ -191,8 +191,8 @@
 
         <footer>
             <img src="hbg-logo.svg" alt="Helsingborgs stad" class="footer-logo">
-            <p>Stadsbyggnadsforvaltningen — Helsingborgs stad</p>
-            <p class="footer-source">Restaurangdata fran <a href="https://tillstandsenheten.helsingborg.se/AlkTWebbforms/Restaurants" target="_blank">Tillstandsenheten</a></p>
+            <p>Stadsbyggnadsförvaltningen — Helsingborgs stad</p>
+            <p class="footer-source">Restaurangdata från <a href="https://tillstandsenheten.helsingborg.se/AlkTWebbforms/Restaurants" target="_blank">Tillståndsenheten</a></p>
         </footer>
     </div>
 

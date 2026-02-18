@@ -1,4 +1,4 @@
-// === AW GENERATOR — Stadsbyggnadsforvaltningen Helsingborg ===
+// === AW GENERATOR — Stadsbyggnadsförvaltningen Helsingborg ===
 
 const PASSWORD = 'SBFAW2026';
 const STORAGE_KEY_AUTH = 'aw_auth';
@@ -222,7 +222,7 @@ document.getElementById('battle-declare').addEventListener('click', () => {
   let winner;
   if (battleVotes[1] > battleVotes[2]) winner = battleRestaurants[1];
   else if (battleVotes[2] > battleVotes[1]) winner = battleRestaurants[2];
-  else { winner = Math.random() > 0.5 ? battleRestaurants[1] : battleRestaurants[2]; showToast('Oavgjort — odet avgor!'); }
+  else { winner = Math.random() > 0.5 ? battleRestaurants[1] : battleRestaurants[2]; showToast('Oavgjort — ödet avgör!'); }
 
   winnerDeclared = true;
   document.getElementById('winner-name').textContent = winner.name;
@@ -236,7 +236,7 @@ document.getElementById('battle-reset').addEventListener('click', startBattle);
 
 document.getElementById('battle-share').addEventListener('click', () => {
   const r1 = battleRestaurants[1], r2 = battleRestaurants[2];
-  let text = `AW BATTLE\n\nA: ${r1.name} (${r1.address}) — ${battleVotes[1]} roster\nB: ${r2.name} (${r2.address}) — ${battleVotes[2]} roster`;
+  let text = `AW BATTLE\n\nA: ${r1.name} (${r1.address}) — ${battleVotes[1]} röster\nB: ${r2.name} (${r2.address}) — ${battleVotes[2]} röster`;
   if (winnerDeclared) text += `\n\nVinnare: ${document.getElementById('winner-name').textContent}`;
   text += '\n\nawgenerator.helsingborg';
   navigator.clipboard.writeText(text).then(() => showToast('Kopierat!')).catch(() => showToast('Kunde inte kopiera'));
@@ -254,7 +254,7 @@ function saveAwDates(dates) {
 
 function formatDate(dateStr) {
   const d = new Date(dateStr);
-  const weekdays = ['sondag', 'mandag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lordag'];
+  const weekdays = ['söndag', 'måndag', 'tisdag', 'onsdag', 'torsdag', 'fredag', 'lördag'];
   const months = ['jan', 'feb', 'mar', 'apr', 'maj', 'jun', 'jul', 'aug', 'sep', 'okt', 'nov', 'dec'];
   return `${weekdays[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]}`;
 }
@@ -278,12 +278,12 @@ function generateICS(awDate) {
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//AW Generator//Stadsbyggnadsforvaltningen//SV',
+    'PRODID:-//AW Generator//Stadsbyggnadsförvaltningen//SV',
     'BEGIN:VEVENT',
     `DTSTART:${fmt(dt)}`,
     `DTEND:${fmt(end)}`,
-    `SUMMARY:AW — Stadsbyggnadsforvaltningen`,
-    `DESCRIPTION:${note}After Work med Stadsbyggnadsforvaltningen Helsingborg`,
+    `SUMMARY:AW — Stadsbyggnadsförvaltningen`,
+    `DESCRIPTION:${note}After Work med Stadsbyggnadsförvaltningen Helsingborg`,
     `LOCATION:Helsingborg`,
     'END:VEVENT',
     'END:VCALENDAR'
@@ -300,7 +300,7 @@ function downloadICS(awDate) {
   a.download = `aw-${awDate.date}.ics`;
   a.click();
   URL.revokeObjectURL(url);
-  showToast('Kalenderhandelse nedladdad!');
+  showToast('Kalenderhändelse nedladdad!');
 }
 
 function updateCountdown() {
@@ -308,7 +308,7 @@ function updateCountdown() {
   const card = document.getElementById('next-aw-card');
 
   if (!next) {
-    card.innerHTML = '<p class="no-aw">Inga planerade AW. Lagg till ett datum nedan!</p>';
+    card.innerHTML = '<p class="no-aw">Inga planerade AW. Lägg till ett datum nedan!</p>';
     return;
   }
 
@@ -350,7 +350,7 @@ function renderCalendar() {
           ${d.note ? `<span class="aw-date-note">${d.note}</span>` : ''}
         </div>
         <div class="aw-date-actions">
-          <button class="btn-icon" onclick="downloadICS(getAwDates()[${i}])" title="Lagg till i kalender">
+          <button class="btn-icon" onclick="downloadICS(getAwDates()[${i}])" title="Lägg till i kalender">
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
           </button>
           <button class="btn-icon btn-icon-danger" onclick="removeAwDate(${i})" title="Ta bort">
@@ -390,7 +390,7 @@ document.getElementById('save-aw-btn').addEventListener('click', () => {
   const time = document.getElementById('new-aw-time').value || '16:30';
   const note = document.getElementById('new-aw-note').value;
 
-  if (!date) { showToast('Valj ett datum'); return; }
+  if (!date) { showToast('Välj ett datum'); return; }
 
   const dates = getAwDates();
   dates.push({ date, time, note });
