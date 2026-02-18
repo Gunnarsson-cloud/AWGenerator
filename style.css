@@ -599,6 +599,97 @@ header { margin-bottom: 2rem; }
   margin-bottom: 1rem;
 }
 
+/* === BATTLE SETUP === */
+.battle-setup {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.battle-pick-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.4rem;
+}
+
+.search-select {
+  position: relative;
+}
+
+.search-select-input {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.8rem;
+  transition: border-color var(--transition);
+}
+
+.search-select-input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.search-select-input::placeholder { color: var(--text-dim); }
+
+.search-select-input.has-selection {
+  border-color: var(--green);
+  background: var(--green-soft);
+  color: var(--green);
+  font-weight: 600;
+}
+
+.search-select-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-height: 200px;
+  overflow-y: auto;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-top: 4px;
+  z-index: 50;
+  box-shadow: var(--shadow-lg);
+}
+
+.search-select-option {
+  padding: 0.55rem 0.85rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  transition: all var(--transition);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.search-select-option:last-child { border-bottom: none; }
+
+.search-select-option:hover {
+  background: var(--accent-soft);
+  color: var(--text);
+}
+
+.search-select-option .option-area {
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  margin-left: 0.4rem;
+}
+
+@media (max-width: 640px) {
+  .battle-setup {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* === BATTLE CONTROLS === */
 .battle-controls {
   display: flex;

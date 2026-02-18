@@ -106,9 +106,29 @@
 
         <!-- BATTLE MODE -->
         <section id="battle-mode" class="mode-section">
-            <p class="battle-intro">Slumpa två ställen, rösta och låt demokratin avgöra.</p>
+            <p class="battle-intro">Välj eller slumpa två ställen, rösta och låt demokratin avgöra.</p>
 
-            <button class="btn-primary" id="battle-generate-btn">Starta Battle</button>
+            <div class="battle-setup" id="battle-setup">
+                <div class="battle-pick">
+                    <label class="battle-pick-label">Ställe A</label>
+                    <div class="search-select" id="search-select-1">
+                        <input type="text" class="search-select-input" id="battle-search-1" placeholder="Sök eller lämna tomt för slump..." autocomplete="off">
+                        <div class="search-select-dropdown hidden" id="battle-dropdown-1"></div>
+                    </div>
+                </div>
+                <div class="battle-pick">
+                    <label class="battle-pick-label">Ställe B</label>
+                    <div class="search-select" id="search-select-2">
+                        <input type="text" class="search-select-input" id="battle-search-2" placeholder="Sök eller lämna tomt för slump..." autocomplete="off">
+                        <div class="search-select-dropdown hidden" id="battle-dropdown-2"></div>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn-primary" id="battle-generate-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg>
+                Starta Battle
+            </button>
 
             <div class="battle-arena hidden" id="battle-arena">
                 <div class="battle-card battle-left" id="battle-left">

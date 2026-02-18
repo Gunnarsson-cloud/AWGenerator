@@ -172,6 +172,56 @@ document.getElementById('again-btn').addEventListener('click', spin);
 // ── Filter ──
 filterToggle.addEventListener('click', () => filterOptions.classList.toggle('hidden'));
 
+// ── Battle search/select ──
+let battlePicks = { 1: null, 2: null };
+
+function setupBattleSearch(side) {
+  const input = document.getElementById(`battle-search-${side}`);
+  const dropdown = document.getElementById(`battle-dropdown-${side}`);
+
+  function renderOptions(filter) {
+    const q = filter.toLowerCase().trim();
+    const matches = q
+      ? RESTAURANTS.filter(r => r.name.toLowerCase().includes(q) || r.address.toLowerCase().includes(q) || r.area.toLowerCase().includes(q))
+      : RESTAURANTS.slice(0, 30);
+
+    if (!matches.length) {
+      dropdown.innerHTML = '<div class="search-select-option" style="color:var(--text-dim);cursor:default">Inga träffar</div>';
+    } else {
+      dropdown.innerHTML = matches.slice(0, 30).map((r, i) =>
+        `<div class="search-select-option" data-index="${RESTAURANTS.indexOf(r)}">${r.name} <span class="option-area">${r.area}</span></div>`
+      ).join('');
+    }
+    dropdown.classList.remove('hidden');
+  }
+
+  input.addEventListener('focus', () => renderOptions(input.value));
+  input.addEventListener('input', () => {
+    battlePicks[side] = null;
+    input.classList.remove('has-selection');
+    renderOptions(input.value);
+  });
+
+  dropdown.addEventListener('click', (e) => {
+    const opt = e.target.closest('.search-select-option');
+    if (!opt || !opt.dataset.index) return;
+    const r = RESTAURANTS[parseInt(opt.dataset.index)];
+    battlePicks[side] = r;
+    input.value = r.name;
+    input.classList.add('has-selection');
+    dropdown.classList.add('hidden');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest(`#search-select-${side}`)) {
+      dropdown.classList.add('hidden');
+    }
+  });
+}
+
+setupBattleSearch(1);
+setupBattleSearch(2);
+
 // ── Battle ──
 function updateVoteBars() {
   const total = battleVotes[1] + battleVotes[2];
@@ -182,7 +232,18 @@ function updateVoteBars() {
 }
 
 function startBattle() {
-  const [r1, r2] = getTwoRandom();
+  const pool = getFiltered();
+  const randPick = () => pool[Math.floor(Math.random() * pool.length)];
+
+  let r1 = battlePicks[1] || randPick();
+  let r2 = battlePicks[2] || randPick();
+
+  // Avoid same restaurant if possible
+  if (r1.name === r2.name && pool.length >= 2) {
+    let attempts = 0;
+    while (r2.name === r1.name && attempts < 20) { r2 = randPick(); attempts++; }
+  }
+
   battleRestaurants = { 1: r1, 2: r2 };
   battleVotes = { 1: 0, 2: 0 };
   winnerDeclared = false;
@@ -203,6 +264,13 @@ function startBattle() {
   battleArena.classList.remove('hidden');
   battleControls.classList.remove('hidden');
   battleWinner.classList.add('hidden');
+
+  // Reset search inputs
+  battlePicks = { 1: null, 2: null };
+  document.getElementById('battle-search-1').value = '';
+  document.getElementById('battle-search-1').classList.remove('has-selection');
+  document.getElementById('battle-search-2').value = '';
+  document.getElementById('battle-search-2').classList.remove('has-selection');
 }
 
 battleGenerateBtn.addEventListener('click', startBattle);
